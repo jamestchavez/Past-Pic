@@ -4,17 +4,33 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>BEAT CAST</title>
+        <title>Past Pic</title>
         <link rel="stylesheet" href="./assets/css/style.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     </head>
-    <body>
-        <div></div>
-        <div class="">
-            <header>
-                <h1>BEAT CAST</h1>
-            </header>
-        </div>
-        <script src="./assets/js/script.js"></script>
+    <body>  
+
+        <header>
+            <h1>Past Pic</h1>
+        </header>
+        <main>
+            <section id="home" style="display: none">
+                <div id="search-bar">
+                    <p class="title">
+                        What is your Zipcode?
+                    </p>                
+                    <input type="text" zipcode="zipcode" placeholder="Zip Code">
+                <button id="search-btn" type="button" class="button is-rounded is-medium " > Search </button>
+                <button id="find-me-btn" type="button" class="button is-rounded is-medium "> Find Me </button>
+                </div>
+                <img src="./assets/images/earthphoto.avif">
+            </section>
+            <section id="search-page">
+                <button id="go-back"  type="button" class="button is-rounded is-medium" > Go Back </button>
+                <img id="location-img" src="">
+                <input id="date" type="text" placeholder="mm/yyyy">
+            </section>
+            <script src="./assets/js/script.js"></script>
+        </main>
     </body>
     </html>
-    

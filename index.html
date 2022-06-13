@@ -5,31 +5,54 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>Past Pic</title>
-        <link rel="stylesheet" href="./assets/css/style.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+        
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <link rel="stylesheet" href="./assets/css/style.css" />
     </head>
     <body>  
 
         <header>
-            <h1>Past Pic</h1>
+            <h1 class="title has-text-grey-lighter has-text-centered">Past Pic</h1>
         </header>
         <main>
-            <section id="home" style="display: none">
-                <div id="search-bar">
-                    <p class="title">
+            <section id="home" class="has-text-centered">
+                <div id="search-bar" class="is-flex  ">
+                    <div class="">
+                        <p class="subtitle has-text-grey-lighter">
                         What is your Zipcode?
-                    </p>                
-                    <input type="text" zipcode="zipcode" placeholder="Zip Code">
-                <button id="search-btn" type="button" class="button is-rounded is-medium " > Search </button>
-                <button id="find-me-btn" type="button" class="button is-rounded is-medium "> Find Me </button>
+                        </p>                
+                        <div class="row is-three-fourths">
+                            <input type="text"  name="zip" pattern="[0-9]*" placeholder="Zip Code" id="zip">
+                            <button id="search-btn" type="button" class="button is-rounded is-small " > Search </button>
+                        </div>
+                        <button id="find-me-btn" type="button" class="button is-rounded is-small "> Find Me </button>
+                    </div>
                 </div>
-                <img src="./assets/images/earthphoto.avif">
+                
             </section>
-            <section id="search-page">
-                <button id="go-back"  type="button" class="button is-rounded is-medium" > Go Back </button>
-                <img id="location-img" src="">
-                <input id="date" type="text" placeholder="mm/yyyy">
+            <section id="search-page" class="has-text-centered" style="display: none;">
+                <div class="columns">
+                    
+                    <div class="column is-one-quarter">
+                        <button id="go-back"  type="button" class="button m-3 is-rounded is-medium"> Go Back </button>
+                    </div>
+                    <div class="column"></div>
+                </div>
+                
+                <div class="columns is-full">
+                    <img id="location-img" src="">
+                </div>
+                <div class="columns">
+                    <div class="column"></div>
+                    <div class="column is-three-fourths">
+                        <input id="datepicker" type="text" placeholder="mm/yyyy" class="date p-3 is-size-5-mobile">
+                    </div>
+                    <div class="column"></div>
+                </div>
             </section>
+            <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+            <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
             <script src="./assets/js/script.js"></script>
         </main>
     </body>

@@ -20,7 +20,7 @@ main {
 
 
 
-#zip{
+input {
     padding:5px;
     border-radius: 5px;
 }
@@ -34,10 +34,15 @@ main {
     margin-left:5px;
 }
 
-#find-me-btn {
-    display: block;
-    margin: 5px;
-    justify-content: center;
+.button {
+   background-color: #072b51; 
+   border:#213048;
+   color: lightgrey
+    
+}
+
+.button:hover {
+    color:#fbf2d7
 }
 
 #home {

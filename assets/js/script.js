@@ -8,8 +8,8 @@ function redAlert() {
 
 $(document).ready(() => {
     $('#search-btn').on('click', () => {
-        zipEntry = zip.value
-        if (zipEntry){
+        zipEntry = zip.value;
+        if (zipEntry.length > 4 && zipEntry.length < 12){
             $('#home').hide();
             $('#search-page').show();
             console.log(zipEntry);

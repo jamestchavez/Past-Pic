@@ -16,22 +16,26 @@
             <h1 class="title has-text-grey-lighter has-text-centered">Past Pic</h1>
         </header>
         <main>
-            <section id="home" class="has-text-centered">
-                <div id="search-bar" class="is-flex  ">
-                    <div class="">
-                        <p class="subtitle has-text-grey-lighter">
-                        What is your Zipcode?
-                        </p>                
-                        <div class="row is-three-fourths">
-                            <input type="text"  name="zip" pattern="[0-9]*" placeholder="Zip Code" id="zip">
+            <section id="home" class="has-text-centered mt-4" style="display: none;">
+                <div id="search-bar" class="is-flex">
+                    <div>
+                        <div>
+                            <p class="subtitle has-text-grey-lighter">
+                                What is your Zipcode?
+                            </p>                
+                        </div>
+                        <div class="column is-three-fourths">
+                            <input type="text"  name="zip" pattern="[0-9]*" placeholder="Zip Code" id="zip"/>
                             <button id="search-btn" type="button" class="button is-rounded is-small " > Search </button>
                         </div>
-                        <button id="find-me-btn" type="button" class="button is-rounded is-small "> Find Me </button>
+                        <div class="column">
+                            <button id="find-me-btn" type="button" class="button is-rounded is-medium is-justify-content-center"> Find Me </button>
+                        </div>
                     </div>
                 </div>
                 
             </section>
-            <section id="search-page" class="has-text-centered" style="display: none;">
+            <section id="search-page" class="has-text-centered">
                 <div class="columns">
                     
                     <div class="column is-one-quarter">
@@ -45,7 +49,7 @@
                 </div>
                 <div class="columns">
                     <div class="column"></div>
-                    <div class="column is-three-fourths">
+                    <div class="column is-half">
                         <input id="datepicker" type="text" placeholder="mm/yyyy" class="date p-3 is-size-5-mobile">
                         <button id="show-img" type="button" class="button is-rounded is-medium">Change Date</button>
                     </div>

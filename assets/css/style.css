@@ -4,21 +4,18 @@
 }
 
 body {
-    background-color: black;
-    
     
 }
 
-main {
-    background-image: url('/assets/images/earthphoto.avif');
+html {
+    background: url('/assets/images/earthphoto.avif') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat; 
     height: 100vh;
-
+    
 }
-
-
 
 input {
     padding:5px;
@@ -35,26 +32,12 @@ input {
 }
 
 .button {
-   background-color: #072b51; 
-   border:#213048;
-   color: lightgrey
+    background-color: #072b51; 
+    border:#213048;
+    color: lightgrey
     
 }
 
 .button:hover {
     color:#fbf2d7
 }
-
-#home {
-    
-}
-
-
-
-/* #home img {
-    position: fixed;
-    bottom: 0;
-    margin: auto;
-    z-index: 0;
-} */
-

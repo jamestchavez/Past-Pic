@@ -20,8 +20,10 @@ $(document).ready(() => {
     })
 
     $('#find-me-btn').on('click', () => {
+        inSide = datepicker
         $('#home').hide();
         $('#search-page').show();
+
     })
 
     $('#go-back').on('click', () => {
@@ -40,5 +42,8 @@ $(document).ready(() => {
 
 
 $(function(){
-$('#datepicker').datepicker();
+    $('#datepicker').datepicker({
+        changeMonth: true,
+        changeYear: true
+    });
 });

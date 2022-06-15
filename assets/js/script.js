@@ -1,9 +1,59 @@
-
-// @ts-check
 const NASA_API_KEY = "orR7avVLgSIHlctShMn825UHYNPINYB7iqOj2rAE"; // Terrible practice
 const GEO_API_KEY = "40604de622334a63bcab330aff218a62";
 
-// Makes query string from objject
+
+function redAlert() {
+    function undo(){
+        $('#zip').removeClass('has-background-danger');
+    }
+    $('#zip').addClass('has-background-danger');
+    setTimeout(undo, 500);
+}
+
+$(document).ready(() => {
+    $('#search-btn').on('click', () => {
+        zipEntry = zip.value;
+        if (zipEntry.length > 4 && zipEntry.length < 12){
+            $('#home').hide();
+            $('#search-page').show();
+            console.log(zipEntry);
+            zip.value = "";
+        } else {
+            redAlert();
+        }
+    })
+
+    $('#find-me-btn').on('click', () => {
+        inSide = datepicker
+        $('#home').hide();
+        $('#search-page').show();
+
+    })
+
+    $('#go-back').on('click', () => {
+        $('#search-page').hide();
+        $('#home').show();
+    })
+    $('#show-img').on('click', () => {
+        dayEntry = datepicker.value;
+        console.log(dayEntry);
+    }
+    )
+
+});
+
+
+
+
+$(function(){
+    $('#datepicker').datepicker({
+        changeMonth: true,
+        changeYear: true
+    });
+});
+
+
+// Makes query string from object
 function makeQueryString(paramsObject) {
     var rawQueryString = "?"; 
     var currentIteration = 0;

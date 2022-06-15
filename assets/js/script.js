@@ -110,21 +110,27 @@ async function requestBackupImage(dateString = "2020-06-20") {
 
 // @ts-ignore
 $(async function () {
+    
+    
     let localLocationInfo = await fetchLocalLocationInfo() // Used for "Find me" button
     let locationInfo = await getLocationFromZip("11111")
     
 
     // Example implementation of backup API
+
+    let locationImg = $("#location-img")
+
     requestImage(1,1,"2020-06-20").then(data => {
-        console.log(data)
+        console.log(data) // Dunno what this API responds with since its broken
     }).catch(async error => {
         console.log("Main API failed, doing backup...")
         // run backup
         try {
             let imgUrl = await requestBackupImage()
             console.log(imgUrl)
+            locationImg.attr("src",imgUrl)
         } catch {
-            console.log("Backup failed!")
+            console.log("Backup failed!") //TODO: Display something if backup also fails.
         }
     }) 
 })

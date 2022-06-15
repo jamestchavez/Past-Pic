@@ -85,23 +85,52 @@ async function getLocationFromZip(query) {
 
 
 async function requestImage(lat, lon, dateString) {
-    let query = makeQueryString({
-        api_key : NASA_API_KEY,
-        lat : lat,
-        lon : lon,
-        date : dateString
-    });
-    return fetch("https://api.nasa.gov/planetary/earth/imagery" + query).then(response => response.json())
+    return new Promise((resolve, reject) => {
+        setTimeout(reject, 2000)
+        let query = makeQueryString({
+            api_key : NASA_API_KEY,
+            lat : lat,
+            lon : lon,
+            date : dateString
+        });
+        fetch("https://api.nasa.gov/planetary/earth/imagery" + query).then(response => response.json())
+            .then(data => resolve(data))
+        
+    })
 }
 
-async function requestBackupImage(lat, lon, dateString) {
-    return await "image.png"
-
+async function requestBackupImage(dateString = "2020-06-20") {
+    let data = await fetch("https://epic.gsfc.nasa.gov/api/natural/date/" + dateString).then(response => response.json())
+    
+    if (data[0]) {
+        // @ts-ignore
+        return "https://epic.gsfc.nasa.gov/archive/natural/" + dateString.replaceAll("-","/") + "/png/" + data[0].image + ".png";
+    }
 }
 
+// @ts-ignore
 $(async function () {
+    
+    
     let localLocationInfo = await fetchLocalLocationInfo() // Used for "Find me" button
     let locationInfo = await getLocationFromZip("11111")
+    
 
-    let data = getRowAndColumn(30, -95) // Used for getting the nasa image
+    // Example implementation of backup API
+
+    let locationImg = $("#location-img")
+
+    requestImage(1,1,"2020-06-20").then(data => {
+        console.log(data) // Dunno what this API responds with since its broken
+    }).catch(async error => {
+        console.log("Main API failed, doing backup...")
+        // run backup
+        try {
+            let imgUrl = await requestBackupImage()
+            console.log(imgUrl)
+            locationImg.attr("src",imgUrl)
+        } catch {
+            console.log("Backup failed!") //TODO: Display something if backup also fails.
+        }
+    }) 
 })

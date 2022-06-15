@@ -17,12 +17,12 @@ function makeQueryString(paramsObject) {
     return encodeURI(rawQueryString);
 }
 
-async function fetchLocationInfo() {
+async function fetchLocalLocationInfo() {
     let fetchPromise = await fetch("http://ip-api.com/json/").then(response => response.json());
     return {lon: fetchPromise.lon, lat: fetchPromise.lat}
 }
 
-async function getLocation(query) {
+async function getLocationFromZip(query) {
     let data =  await fetch("https://api.geoapify.com/v1/geocode/search" + makeQueryString({apiKey: GEO_API_KEY, text : query})).then(response => response.json())
     if (data.features && data.features.length > 0) {
         var properties = data.features[0].properties
@@ -32,17 +32,25 @@ async function getLocation(query) {
     }
 }
 
+
 async function requestImage(lat, lon, dateString) {
     let query = makeQueryString({
-        api_key : API_KEY,
+        api_key : NASA_API_KEY,
         lat : lat,
         lon : lon,
         date : dateString
     });
-    return fetch("https://api.nasa.gov/planetary/earth/imagery" + query)
+    return fetch("https://api.nasa.gov/planetary/earth/imagery" + query).then(response => response.json())
+}
+
+async function requestBackupImage(lat, lon, dateString) {
+    return await "image.png"
+
 }
 
 $(async function () {
-    let ip = await fetchLocationInfo()
-    console.log(await getLocation("78258"))
+    let localLocationInfo = await fetchLocalLocationInfo() // Used for "Find me" button
+    let locationInfo = await getLocationFromZip("11111")
+
+    let data = getRowAndColumn(30, -95) // Used for getting the nasa image
 })

@@ -12,6 +12,6 @@ As a user, I want to view satellite images over time of a specific location to g
 https://api.geoapify.com/v1/geocode/search
 
 # Contributors
-Harrison Lewis
-Elena Carey
-James Chavez
+-Harrison Lewis
+-Elena Carey
+-James Chavez

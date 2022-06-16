@@ -142,6 +142,7 @@ function addToHistory(dateString, image) { //Adds a user to the leaderboard
         historyObject[key][dateString] = {
             url : image
         }
+        currentCache = history[key];
         localStorage.setItem("history", JSON.stringify(historyObject));
         return true;
     } else {

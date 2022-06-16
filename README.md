@@ -18,6 +18,6 @@ Geocoding:
 * Local User: https://ip-api.com/
 
 # Contributors
-* Harrison Lewis
-* Elena Carey
-* James Chavez
+* Harrison Lewis: https://stratiz.github.io/portfolio/
+* Elena Carey: https://elenalaree.github.io/Portfolio/
+* James Chavez: https://jamestchavez.github.io/mod2chall2/

@@ -46,7 +46,9 @@ $(document).ready(async () => {
     //Show new date button
     $('#show-img').on('click', () => {
         dayEntry = datepicker.value;
+        fetchImage(lat, lon, dayEntry);
         console.log(dayEntry);
+
     }
     )
 
@@ -129,12 +131,40 @@ async function requestImage(lat, lon, dateString) {
 
 async function requestBackupImage(dateString = "2020-06-20") {
     let data = await fetch("https://epic.gsfc.nasa.gov/api/natural/date/" + dateString).then(response => response.json())
-    
+    console.log(data, dateString);
     if (data[0]) {
         // @ts-ignore
         return "https://epic.gsfc.nasa.gov/archive/natural/" + dateString.replaceAll("-","/") + "/png/" + data[0].image + ".png";
     }
 }
+async function fetchImage(lat, lon, dateString){
+    let locationImg = $("#location-img")
+    requestImage(lat, lon, dateString).then(data => {
+        console.log(data) // Dunno what this API responds with since its broken
+    }).catch(async error => {
+        console.log("Main API failed, doing backup...")
+        // run backup
+        let imgUrl = undefined;
+        try {
+            imgUrl = await requestBackupImage(dateString)
+            console.log(imgUrl)
+            locationImg.attr("src",imgUrl)
+        } catch {
+            console.log("Backup failed!") //TODO: Display something if backup also fails.
+        } finally {
+            if(imgUrl == undefined) {
+                $('.oops').show();
+            }
+        }
+    }) 
+}
+    
+
+
+
+
+
+
 
 // // @ts-ignore
 // $(async function () {

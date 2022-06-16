@@ -1,10 +1,8 @@
+/* Global default traits */
+
 * {
     padding: 0;
     margin: 0;
-}
-
-body {
-    
 }
 
 html {
@@ -22,14 +20,19 @@ input {
     border-radius: 5px;
 }
 
-#search-bar {
-    justify-content: center;
-    margin: auto;
-}
+/* List and ordered list behavior */
 
-#search-btn {
-    margin-left:5px;
-}
+ol {
+    list-style: none;
+    counter-reset: olCounter;
+    padding-left: 0;
+  }
+  
+  li {
+    counter-increment: olCounter;
+  }
+  
+
 
 .button {
     background-color: #072b51; 
@@ -45,3 +48,29 @@ input {
 .date {
     margin: 0 5px 15px 5px;
 }
+
+/* Custom for IDs */
+
+#search-bar {
+    justify-content: center;
+    margin: auto;
+}
+
+#search-btn {
+    margin-left:5px;
+}
+
+#location-img {
+    width: 50%;
+    margin: auto
+}
+
+@media only screen and (max-width: 600px) {
+    #location-img {
+        width: 90%;
+        margin: auto
+    }
+}
+
+
+

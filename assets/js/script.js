@@ -1,7 +1,10 @@
 const NASA_API_KEY = "orR7avVLgSIHlctShMn825UHYNPINYB7iqOj2rAE"; // Terrible practice
 const GEO_API_KEY = "40604de622334a63bcab330aff218a62";
+//@ts-check
+var lon = 0;
+var lat = 0;
 
-//function to alert the zip code doesnt meet requirements
+//function to alert the zip code doesn't meet requirements
 function redAlert() {
     function undo(){
         $('#zip').removeClass('has-background-danger');
@@ -10,14 +13,14 @@ function redAlert() {
     setTimeout(undo, 500);
 }
 
-$(document).ready(() => {
+$(document).ready(async () => {
     //search button on click actions
-    $('#search-btn').on('click', () => {
+    $('#search-btn').on('click', async () => {
         zipEntry = zip.value;
         if (zipEntry.length > 4 && zipEntry.length < 12){
             $('#home').hide();
             $('#search-page').show();
-            getLocationFromZip(zipEntry);
+            zipPass(zipEntry);
             zip.value = "";
         } else {
             redAlert();
@@ -28,9 +31,8 @@ $(document).ready(() => {
     $('#find-me-btn').on('click', () => {
         $('#home').hide();
         $('#search-page').show();
-        fetchLocalLocationInfo();
-        let info = fetchLocalLocationInfo().argument;
-        console.log(info);
+        findMe();
+        
         
 
     })
@@ -50,12 +52,31 @@ $(document).ready(() => {
 
 });
 
+//find me function
+async function findMe(){
+    dayEntry = datepicker.value;
+    let location = await fetchLocalLocationInfo();
+    lat = location.lat;
+    lon = location.lon;
+    requestImage(lat, lon, dayEntry);
+}
+
+//find zip code function
+async function zipPass(zip) {
+    let getCoord = await getLocationFromZip(zip);
+    lat = getCoord.lat;
+    lon= getCoord.lon;
+    dayEntry = datepicker.value;
+    requestImage(lat, lon, dayEntry);
+}
+
 //calendar function
 $(function(){
     $('#datepicker').datepicker({
         changeMonth: true,
-        changeYear: true
-    });
+        changeYear: true,
+        dateFormat: 'yy-mm-dd'
+    }).datepicker('setDate', 'today');
 });
 
 
@@ -91,23 +112,53 @@ async function getLocationFromZip(query) {
 
 
 async function requestImage(lat, lon, dateString) {
-    let query = makeQueryString({
-        api_key : NASA_API_KEY,
-        lat : lat,
-        lon : lon,
-        date : dateString
-    });
-    return fetch("https://api.nasa.gov/planetary/earth/imagery" + query).then(response => response.json())
+    return new Promise((resolve, reject) => {
+        setTimeout(reject, 2000)
+        console.log(lat, lon, dateString);
+        let query = makeQueryString({
+            api_key : NASA_API_KEY,
+            lat : lat,
+            lon : lon,
+            date : dateString
+        });
+        fetch("https://api.nasa.gov/planetary/earth/imagery" + query).then(response => response.json())
+            .then(data => resolve(data))
+        
+    })
 }
 
-async function requestBackupImage(lat, lon, dateString) {
-    return await "image.png"
-
+async function requestBackupImage(dateString = "2020-06-20") {
+    let data = await fetch("https://epic.gsfc.nasa.gov/api/natural/date/" + dateString).then(response => response.json())
+    
+    if (data[0]) {
+        // @ts-ignore
+        return "https://epic.gsfc.nasa.gov/archive/natural/" + dateString.replaceAll("-","/") + "/png/" + data[0].image + ".png";
+    }
 }
 
+// // @ts-ignore
 // $(async function () {
+    
+    
 //     let localLocationInfo = await fetchLocalLocationInfo() // Used for "Find me" button
 //     let locationInfo = await getLocationFromZip("11111")
+    
 
-//     let data = getRowAndColumn(30, -95) // Used for getting the nasa image
+//     // Example implementation of backup API
+
+//     let locationImg = $("#location-img")
+
+//     requestImage(1,1,"2020-06-20").then(data => {
+//         console.log(data) // Dunno what this API responds with since its broken
+//     }).catch(async error => {
+//         console.log("Main API failed, doing backup...")
+//         // run backup
+//         try {
+//             let imgUrl = await requestBackupImage()
+//             console.log(imgUrl)
+//             locationImg.attr("src",imgUrl)
+//         } catch {
+//             console.log("Backup failed!") //TODO: Display something if backup also fails.
+//         }
+//     }) 
 // })

@@ -49,7 +49,6 @@ function makeQueryString(paramsObject) {
 async function requestImage(lat, lon, dateString) {
     return new Promise((resolve, reject) => {
         setTimeout(reject, 2000)
-        console.log(lat, lon, dateString);
         let query = makeQueryString({
             api_key : NASA_API_KEY,
             lat : lat,
@@ -103,7 +102,6 @@ async function setImageFromAPI(lat, lon, dateString){
         // run backup
         try {
             imgUrl = await requestBackupImage(dateString)
-            console.log(imgUrl)
         } catch {
             console.log("Backup API failed!") //TODO: Display something if backup also fails.
         } finally {
@@ -116,7 +114,6 @@ async function setImageFromAPI(lat, lon, dateString){
     setImage(imgUrl)
     if (imgUrl) {
         let added = addToHistory(dateString, imgUrl);
-        console.log(added);
         if (added == true) {
             addHistoryButton(dateString)
         } 
@@ -142,7 +139,7 @@ function addToHistory(dateString, image) { //Adds a user to the leaderboard
         historyObject[key][dateString] = {
             url : image
         }
-        currentCache = history[key];
+        currentCache = historyObject[key];
         localStorage.setItem("history", JSON.stringify(historyObject));
         return true;
     } else {
@@ -252,10 +249,11 @@ $(document).ready(async () => {
 
     // Get data from previous searches
     historyList.on("click", "button", function(element) {
-        console.log(element.currentTarget.innerText);
         if (currentCache[element.currentTarget.innerText]) {
             resetImageDetails();
             setImage(currentCache[element.currentTarget.innerText].url)
+        } else {
+            console.log("Not found in current cache",currentCache)
         }
     })
 });

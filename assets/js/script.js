@@ -5,6 +5,13 @@ const GEO_API_KEY = "40604de622334a63bcab330aff218a62";
 // Global Variables
 var lon = 0;
 var lat = 0;
+var currentCache = {};
+
+// Buttons
+let findMeButton = $('#find-me-btn')
+let backButton = $('#go-back')
+let searchButton = $('#search-btn')
+let confirmDateButton = $('#confirm-date-btn')
 
 // Geocoding API
 async function fetchLocalLocationInfo() { // Fetches lon/lat for the current user.
@@ -23,6 +30,22 @@ async function getLocationFromZip(query) { // Fetches lon/lat for a specific zip
 }
 
 // Image API functions
+
+// Makes query string from object
+function makeQueryString(paramsObject) {
+    var rawQueryString = "?"; 
+    var currentIteration = 0;
+    let objectLength = Object.keys(paramsObject).length
+    for (var key in paramsObject) {
+        currentIteration += 1;
+        rawQueryString = rawQueryString + key + "=" + paramsObject[key];
+        if (currentIteration < objectLength) {
+            rawQueryString = rawQueryString + "&"
+        }
+    }
+    return encodeURI(rawQueryString);
+}
+
 async function requestImage(lat, lon, dateString) {
     return new Promise((resolve, reject) => {
         setTimeout(reject, 2000)
@@ -56,30 +79,99 @@ async function requestBackupImage(dateString = "2020-06-20") {
     }
 }
 
-async function setImage(lat, lon, dateString){
-    let locationImg = $("#location-img")
-    requestImage(lat, lon, dateString).then(imgUrl => {
-        console.log(imgUrl) 
-        locationImg.attr("src",imgUrl)
-    }).catch(async error => {
+let locationImg = $("#location-img")
+let warningLabel = $('.oops')
+
+function resetImageDetails() {
+    locationImg.attr("src","")
+    warningLabel.hide();
+}
+
+function setImage(imgUrl) {
+    locationImg.attr("src",imgUrl)
+}
+
+async function setImageFromAPI(lat, lon, dateString){
+    resetImageDetails();
+    
+
+    let imgUrl = undefined;
+    try {
+        imgUrl = await requestImage(lat, lon, dateString)
+    } catch (err) {
         console.log("Main API failed, doing backup...")
         // run backup
-        let imgUrl = undefined;
         try {
             imgUrl = await requestBackupImage(dateString)
             console.log(imgUrl)
-            locationImg.attr("src",imgUrl)
         } catch {
-            console.log("Backup failed!") //TODO: Display something if backup also fails.
+            console.log("Backup API failed!") //TODO: Display something if backup also fails.
         } finally {
-            if(imgUrl == undefined) {
-                $('.oops').show();
+            if (imgUrl == undefined) {
+                warningLabel.show();
             }
         }
-    });
+    }
+
+    setImage(imgUrl)
+    if (imgUrl) {
+        let added = addToHistory(dateString, imgUrl);
+        console.log(added);
+        if (added == true) {
+            addHistoryButton(dateString)
+        } 
+    }
 }
     
+// Data getter and setter function for history
+function getHistory() { // Fetches the leaderboard data from localStorage
+    let historyObject = JSON.parse(localStorage.getItem("history"));
+    if (!historyObject) {
+        historyObject = {};
+    }
+    return historyObject
+  }
+  
+function addToHistory(dateString, image) { //Adds a user to the leaderboard
+    let historyObject = getHistory();
+    let key = lon.toString() + lat.toString()
+    if (!historyObject[key]) {
+        historyObject[key] = {};
+    }
+    if (!historyObject[key][dateString]) {
+        historyObject[key][dateString] = {
+            url : image
+        }
+        localStorage.setItem("history", JSON.stringify(historyObject));
+        return true;
+    } else {
+        return false;
+    }
+} 
+  
 // Dynamic HTML functions
+
+let historyList = $("#history")
+
+function addHistoryButton(dateString) { // Adds a button to the history list
+    var newListItem = $("<li></li>");
+    newListItem.append($('<button class="button is-rounded is-medium" style="width: 100%; margin-top: 10px;">'+ dateString +'</button>'));
+
+    historyList.append(newListItem);
+}
+
+function populateHistory() {
+    historyList.empty();
+    let key = lon.toString() + lat.toString()
+    let history = getHistory();
+    if (history[key]) {
+        for (let dateString in history[key]) {
+            addHistoryButton(dateString);
+        }
+        currentCache = history[key];
+    }
+    
+}
 
 //function to alert the zip code doesn't meet requirements
 function redAlert() {
@@ -91,14 +183,15 @@ function redAlert() {
 }
 
 //find me function
-async function findMe(){
+async function findMe() {
     let dayEntry = datepicker.value;
     let location = await fetchLocalLocationInfo();
     lat = location.lat;
     lon = location.lon;
-    // TODO: Add loading button
-    await setImage(lat, lon, dayEntry);
-    // TODO: Stop loading button
+    findMeButton.addClass("is-loading");
+    await setImageFromAPI(lat, lon, dayEntry);
+    findMeButton.removeClass("is-loading");
+    populateHistory();
 }
 
 //find zip code function
@@ -107,24 +200,10 @@ async function zipPass(zip) {
     lat = getCoord.lat;
     lon = getCoord.lon;
     let dayEntry = datepicker.value;
-    // TODO: Add loading button
-    await setImage(lat, lon, dayEntry);
-    // TODO: Stop loading button
-}
-
-// Makes query string from object
-function makeQueryString(paramsObject) {
-    var rawQueryString = "?"; 
-    var currentIteration = 0;
-    let objectLength = Object.keys(paramsObject).length
-    for (var key in paramsObject) {
-        currentIteration += 1;
-        rawQueryString = rawQueryString + key + "=" + paramsObject[key];
-        if (currentIteration < objectLength) {
-            rawQueryString = rawQueryString + "&"
-        }
-    }
-    return encodeURI(rawQueryString);
+    searchButton.addClass("is-loading");
+    await setImageFromAPI(lat, lon, dayEntry);
+    searchButton.removeClass("is-loading");
+    populateHistory();
 }
 
 // Main Init function
@@ -137,12 +216,12 @@ $(document).ready(async () => {
     }).datepicker('setDate', 'today');
 
     //search button on click actions
-    $('#search-btn').on('click', async () => {
+    searchButton.on('click', async () => {
         zipEntry = zip.value;
-        if (zipEntry.length > 4 && zipEntry.length < 12){
+        if (zipEntry.length > 4 && zipEntry.length < 12) {
+            await zipPass(zipEntry);
             $('#home').hide();
             $('#search-page').show();
-            zipPass(zipEntry);
             zip.value = "";
         } else {
             redAlert();
@@ -150,25 +229,32 @@ $(document).ready(async () => {
     })
 
     //find my location button on click actions
-    $('#find-me-btn').on('click', () => {
+    findMeButton.on('click', async () => {
+        await findMe();
         $('#home').hide();
         $('#search-page').show();
-        findMe();
     })
 
     //go back button
-    $('#go-back').on('click', () => {
+    backButton.on('click', () => {
         $('#search-page').hide();
         $('#home').show();
     })
 
     //Show new date button
-    $('#show-img').on('click', async () => {
+    confirmDateButton.on('click', async () => {
         dayEntry = datepicker.value;
-        // TODO: Add loading button
-        await setImage(lat, lon, dayEntry);
-        // TODO: Stop loading button
-        console.log(dayEntry);
+        confirmDateButton.addClass("is-loading");
+        await setImageFromAPI(lat, lon, dayEntry);
+        confirmDateButton.removeClass("is-loading");
+    })
 
+    // Get data from previous searches
+    historyList.on("click", "button", function(element) {
+        console.log(element.currentTarget.innerText);
+        if (currentCache[element.currentTarget.innerText]) {
+            resetImageDetails();
+            setImage(currentCache[element.currentTarget.innerText].url)
+        }
     })
 });

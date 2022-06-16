@@ -37,7 +37,17 @@ input {
     color: lightgrey
     
 }
+.button:active {
+    background-color: #072b51; 
+    border:#213048;
+    color: lightgrey
+    
+}
 
 .button:hover {
     color:#fbf2d7
+}
+
+.date {
+    margin: 0 5px 5px 5px;
 }

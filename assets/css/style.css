@@ -41,3 +41,7 @@ input {
 .button:hover {
     color:#fbf2d7
 }
+
+.date {
+    margin: 0 5px 15px 5px;
+}

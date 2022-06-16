@@ -4,12 +4,22 @@
 }
 
 body {
-    background-color: black;
-    z-index: -1;
+    
 }
 
-header {
+html {
+    background: url('../images/earthphoto.avif') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 100vh;
+    
+}
 
+input {
+    padding:5px;
+    border-radius: 5px;
 }
 
 #search-bar {
@@ -18,28 +28,16 @@ header {
 }
 
 #search-btn {
-    margin: auto;
+    margin-left:5px;
 }
 
-#find-me-btn {
-    display: block;
+.button {
+    background-color: #072b51; 
+    border:#213048;
+    color: lightgrey
+    
 }
 
-#home {
-    z-index: 100;
-}
-
-/* #home img {
-    position: fixed;
-    bottom: 0;
-    margin: auto;
-    z-index: 0;
-} */
-
-main {
-    background-image: url('https://unsplash.com/photos/Q1p7bh3SHj8');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
+.button:hover {
+    color:#fbf2d7
 }

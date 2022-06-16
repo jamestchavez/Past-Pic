@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Past Pic</title>   
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">     
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+        <link rel="stylesheet" href="./assets/css/style.css" />
+    </head>
+    <body scroll="no">  
+        <header>
+            <h1 class="title has-text-grey-lighter has-text-centered">Past Pic</h1>
+        </header>
+        <main>
+            <!-- Section for initial geocoding api -->
+            <section id="home" class="has-text-centered mt-4">
+                <div id="search-bar" class="is-flex">
+                    <div>
+                        <div>
+                            <p class="subtitle has-text-grey-lighter">
+                                What is your Zipcode?
+                            </p>                
+                        </div>
+                        <div class="column is-three-fourths">
+                            <input type="text"  name="zip" pattern="[0-9]*" placeholder="Zip Code" id="zip"/>
+                            <button id="search-btn" type="button" class="button is-rounded is-small" > Search </button>
+                        </div>
+                        <div class="column">
+                            <button id="find-me-btn" type="button" class="button is-rounded is-medium is-justify-content-center"> Find Me </button>
+                        </div>
+                    </div>
+                </div>
+                
+            </section>
+            <!-- Section for displaying image details -->
+            <section id="search-page"  style="display: none;">
+                
+                <button id="go-back"  type="button" class="button is-rounded is-medium" style="margin-left: 15px; margin-bottom: 10px;"> Go Back </button>
+        
+                <div class="has-text-centered">
+                    <input id="datepicker" type="text" placeholder="mm/yyyy" class="date p-3 is-size-5-mobile">
+                    <button id="confirm-date-btn" type="button" class="button is-rounded is-medium is has-text-grey-lighter">Change Date</button>
+                </div>
+                <!-- box for picture and histort -->
+                <div id="picBox">
+                    <div class="oops column is-full has-text-centered block title has-text-grey-lighter" style = "display: none;"><h1>No Image available. Please select another day!</h1></div>
+                    <div class="columns">
+                        <ol id="history" class="column is-one-quarter">
+                            <!-- History buttons get loaded here -->
+                        </ol>
+                        <img id="location-img" class="column" src="">
+                    </div>
+                    
+                </div>
+            </section>
+            <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+            <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+            <script src="./assets/js/script.js"></script>
+        </main>
+        
+    </body>
+    
+</html>

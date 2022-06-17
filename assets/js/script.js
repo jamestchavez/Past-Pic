@@ -14,8 +14,9 @@ let searchButton = $('#search-btn')
 let confirmDateButton = $('#confirm-date-btn')
 
 // Geocoding API
+//DEPRECATED: Do not use.
 async function fetchLocalLocationInfo() { // Fetches lon/lat for the current user.
-    let fetchPromise = await fetch("http://ip-api.com/json/").then(response => response.json());
+    let fetchPromise = await fetch("http://ip-api.com/json/").then(response => response.json()); 
     return {lon: fetchPromise.lon, lat: fetchPromise.lat};
 }
 
@@ -182,14 +183,36 @@ function redAlert() {
 
 //find me function
 async function findMe() {
-    let dayEntry = datepicker.value;
-    let location = await fetchLocalLocationInfo();
-    lat = location.lat;
-    lon = location.lon;
-    findMeButton.addClass("is-loading");
-    await setImageFromAPI(lat, lon, dayEntry);
-    findMeButton.removeClass("is-loading");
-    populateHistory();
+    return new Promise((resolve, reject) => {
+        async function success(pos) {
+            const crd = pos.coords;
+            
+
+            let dayEntry = datepicker.value;
+            let location = crd
+
+            lat = location.latitude;
+            lon = location.longitude;
+            
+            await setImageFromAPI(lat, lon, dayEntry);
+            findMeButton.removeClass("is-loading");
+            populateHistory();
+            resolve(true)
+        }
+        
+        function error(err) {
+            console.warn(`ERROR(${err.code}): ${err.message}`);
+            findMeButton.removeClass("is-loading");
+            resolve(false)
+        }
+        findMeButton.addClass("is-loading");
+        navigator.geolocation.getCurrentPosition(success, error,  {
+            enableHighAccuracy: true,
+            timeout: 5000,
+            maximumAge: 0
+        });
+    });
+    
 }
 
 //find zip code function
@@ -228,9 +251,11 @@ $(document).ready(async () => {
 
     //find my location button on click actions
     findMeButton.on('click', async () => {
-        await findMe();
-        $('#home').hide();
-        $('#search-page').show();
+        let success = await findMe();
+        if (success == true) {
+            $('#home').hide();
+            $('#search-page').show();
+        }
     })
 
     //go back button

@@ -1,6 +1,8 @@
 
 # MODULE 7 GROUP PROJECT 1 --- PAST PIC
 
+<img src="./assets/images/example.gif" alt="drawing" width="700"/>
+
 # Description
 Past Pic allows a user to view satellite images from previous years of a specified zip code location.
 Seeing how a location develops over time is insightful as it allows you to find the newest developed parts of a city.
@@ -21,3 +23,4 @@ Geocoding:
 * Harrison Lewis: https://stratiz.github.io/portfolio/
 * Elena Carey: https://elenalaree.github.io/Portfolio/
 * James Chavez: https://jamestchavez.github.io/mod2chall2/
+
